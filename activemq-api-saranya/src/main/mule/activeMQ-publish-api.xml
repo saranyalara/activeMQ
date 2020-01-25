@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="999c1bda-d397-4be0-b660-d7b5f5af6200" >
+		<http:listener-connection host="0.0.0.0" port="8084" />
+	</http:listener-config>
+	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="2add41cb-1acb-4f67-a0e3-d8de49e993a7" >
+		<jms:active-mq-connection username="admin" password="admin" >
+			<jms:factory-configuration brokerUrl="tcp://localhost:61616" />
+		</jms:active-mq-connection>
+	</jms:config>
+	<flow name="activemq-api-saranyaFlow" doc:id="6f71d093-e4b5-4608-b24d-8cd8d496d6d5" >
+		<http:listener doc:name="Listener" doc:id="25d90a39-d7f4-4b7a-8f70-ab7eb3464ba7" config-ref="HTTP_Listener_config" path="/publish"/>
+		<file:read doc:name="Read" doc:id="3f0931c9-e65a-4e7b-bd55-ed7b9051025c" path="C:\Users\DELL\Downloads\SalesJan2009.csv"/>
+		<jms:publish doc:name="Publish" doc:id="b95a8aa0-fcae-4956-a7ac-07fd58a5ae5b" config-ref="JMS_Config" destination="Queuesaranya"/>
+	</flow>
+</mule>
